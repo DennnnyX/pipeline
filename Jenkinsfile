@@ -3,19 +3,19 @@ pipeline{
     agent any
 
     stages{
-        stage('代码拉取'){
+        stage('pull code'){
             steps{
-                echo '拉取代码'
+                echo 'pull code'
             }
         }
-        stage('编译'){
+        stage('compile'){
             steps{
-                echo '编译'
+                echo 'compile'
             }
         }
-        stage('运行'){
+        stage('run'){
             steps{
-                echo '运行'
+                echo 'run'
             }
         }
 
