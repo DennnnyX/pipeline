@@ -11,7 +11,7 @@ pipeline{
         }
         stage('compile'){
             steps{
-                bat "mvn clean package"
+                sh "mvn clean package"
                 echo 'compile'
             }
         }
