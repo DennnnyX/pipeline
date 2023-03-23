@@ -45,12 +45,18 @@ spec:
         {
             container('kaniko')
             {
-                stage('test')
+                stage('Build With Kaniko')
                 {
-                    echo "hello world"
+                    echo 'Hello kaniko'
+
                 }
             }
         }
 
     }
 }
+
+
+
+
+# /kaniko/executor --force --cache=true --cache-dir=/cache -c `pwd` --dockerfile=./Dockerfile --destination=${image}:latest
