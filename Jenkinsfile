@@ -1,26 +1,56 @@
-pipeline{
+podTemplate(containers: [
+    containerTemplate(name: 'maven', image: 'sunrdocker/jdk17-git-maven-docker-focal', command: 'sleep', args: '99d')
+  ],
+  yaml: """\
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kaniko
+spec:
+  containers:
+  - name: kaniko
+    image: uhub.service.ucloud.cn/uk8sdemo/executor:debug
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+      - name: kaniko-secret
+        mountPath: /kaniko/.docker
+  restartPolicy: Never
+  volumes:
+    - name: kaniko-secret
+      secret:
+        secretName: regcred
+    """.stripIndent()
 
-    agent any
+  )
 
-    stages{
-        stage('pull code'){
-            steps{
-                git credentialsId: '28e2f244-7819-4500-a12a-1ab0a1855aea', url: 'https://github.com/DennnnyX/pipeline.git'
-                echo 'pull code'
+  {
+    node(POD_LABEL) {
+        stage('Git Clone')
+        {
+            git credentialsId: 'a9245f23-3644-4bc1-8ff3-9edd068958c9', url: 'https://github.com/DennnnyX/pipeline.git'
+        }
+        stage('Compile')
+        {
+            container('maven')
+            {
+                stage('mvn packaging')
+                {
+                    sh 'mvn clean package'
+                }
             }
         }
-        stage('compile'){
-            steps{
-                sh "mvn clean package"
-                echo 'compile'
+        stage('Build Into Image')
+        {
+            container('kaniko')
+            {
+                stage('test')
+                {
+                    echo "hello world"
+                }
             }
         }
-        stage('run'){
-            steps{
-                echo 'run'
-            }
-        }
-
 
     }
 }
