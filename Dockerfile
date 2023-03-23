@@ -1,6 +1,6 @@
 FROM sunrdocker/jdk17-git-maven-docker-focal
 
-COPY *.jar /app.jar
+COPY target/*.jar /app.jar
 
 CMD ["--server.port=8080"]
 
