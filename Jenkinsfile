@@ -48,6 +48,7 @@ spec:
                 stage('Build With Kaniko')
                 {
                     echo 'Hello kaniko'
+                    sh "/kaniko/executor --dockerfile `pwd`/Dockerfile --context `pwd` --destination dennnys/pipeline:v2"
 
                 }
             }
